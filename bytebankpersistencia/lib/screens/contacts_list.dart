@@ -1,18 +1,20 @@
-import 'package:bytebankpersistencia/database/app_database.dart';
+import 'package:bytebankpersistencia/database/dao/contact_dao.dart';
 import 'package:bytebankpersistencia/models/contact.dart';
 import 'package:bytebankpersistencia/screens/contact_form.dart';
 import 'package:flutter/material.dart';
 
 class ContactsList extends StatelessWidget {
+  final ContactDao _dao = ContactDao();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contacts"),
+        title: Text('Contacts'),
       ),
       body: FutureBuilder<List<Contact>>(
         initialData: List(),
-        future: findAll(),
+        future: _dao.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -24,7 +26,7 @@ class ContactsList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     CircularProgressIndicator(),
-                    Text("Loading"),
+                    Text('Loading')
                   ],
                 ),
               );
@@ -40,11 +42,9 @@ class ContactsList extends StatelessWidget {
                 },
                 itemCount: contacts.length,
               );
-
               break;
           }
-
-          return Text('Unknown Error');
+          return Text('Unknown error');
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -55,7 +55,9 @@ class ContactsList extends StatelessWidget {
             ),
           );
         },
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+        ),
       ),
     );
   }
@@ -72,11 +74,15 @@ class _ContactItem extends StatelessWidget {
       child: ListTile(
         title: Text(
           contact.name,
-          style: TextStyle(fontSize: 24.0),
+          style: TextStyle(
+            fontSize: 24.0,
+          ),
         ),
         subtitle: Text(
           contact.accountNumber.toString(),
-          style: TextStyle(fontSize: 16.0),
+          style: TextStyle(
+            fontSize: 16.0,
+          ),
         ),
       ),
     );
